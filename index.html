@@ -7,19 +7,23 @@
 <div><label>View</label><select id="mode">
 <option value="energy">Energy (PCr + glycogen)</option><option value="tension">Force output</option>
 <option value="fatigue">Force loss (Pi, H+, ATP)</option><option value="unit">Motor units</option><option value="type">Fibre type</option>
-<option value="stimulus">Growth stimulus (proxy)</option><option value="damage">Muscle damage (proxy)</option></select></div>
+<option value="tut">Time under high tension</option><option value="damage">Muscle damage (proxy)</option></select></div>
 <div><label>Sim speed <b id="vSpeed"></b></label><input id="speed" type="range" min="1" max="30" value="10"></div>
 <div><label class="chk"><input id="cmp" type="checkbox"> Compare with muscle B</label>
 <select id="scn"><option value="">Scenario...</option></select></div>
 <div class="wide"><div class="leg" id="leg"></div><div class="legl"><span id="l0"></span><span id="l1"></span></div></div>
 </div>
+<p class="card warn"><b>Illustrative, not predictive.</b> This tool shows mechanisms: recruitment order, fatigue, set-to-set drop and recovery. It does not predict how much muscle you will grow. Each parameter below is tagged by where it comes from; most are guesses or fits to rep tables.</p>
 <div id="lanes" class="lanes"></div>
 <div class="card wide"><h1>Saved sets</h1>
-<div class="logwrap"><table><thead><tr><th>Set</th><th>Load</th><th>Reps</th><th>End</th><th>Time</th><th>Stim (+set)</th><th>Damage (+set)</th><th>Stim/dmg</th><th>Deficit 24h</th><th>Setup</th></tr></thead><tbody id="logBody"></tbody></table></div>
+<div class="logwrap"><table><thead><tr><th>Set</th><th>Load</th><th>Reps</th><th>End</th><th>Time</th><th>Recruited (slow / fast)</th><th>High-tension s per fibre (slow / fast)</th><th>Effective reps per fibre (slow / fast)</th><th>Damage (+set)</th><th>Deficit 24h</th><th>Setup</th></tr></thead><tbody id="logBody"></tbody></table></div>
 <button id="clearLog" class="small">Clear log</button>
-<p class="note">A set is logged when it ends by failure or Relax. Stim and damage are session means with the change from that set in brackets. Stimulus saturates fast, so later sets add little to it while damage keeps climbing. Deficit 24h is the cumulative projection after that set. "Rest + refuel" keeps CNS fatigue, damage and stimulus totals so sets add up. Muscle B starts as a copy of A's fibres (fresh state) and is tuned independently. Sliders for fibres and fast-twitch share rebuild that muscle when released.</p></div>
+<p class="note">A set is logged when it ends by failure or Relax. Tension figures are session means per fibre, with the change from that set in brackets; an effective rep is one where the fibre spent at least half the rep above 30% of its max force. Damage is the session mean with the change from that set. Deficit 24h is the cumulative projection after that set. "Rest + refuel" keeps CNS fatigue, damage and tension totals so sets add up. Muscle B starts as a copy of A's fibres (fresh state) and is tuned independently. Sliders for fibres and fast-twitch share rebuild that muscle when released.</p></div>
+<div class="card wide"><h1>Where the numbers come from</h1>
+<div class="logwrap"><table><thead><tr><th>Parameter</th><th>Value</th><th>Source</th><th>Note</th></tr></thead><tbody id="provBody"></tbody></table></div>
+<p class="note">Literature: taken from published data. Fitted: tuned to rep tables, which are approximate. Guess: chosen by feel or assumed. None of it is measured on people.</p></div>
 </main>
 <script src="config.js"></script><script src="fibre.js"></script><script src="layout.js"></script>
-<script src="units.js"></script><script src="controller.js"></script><script src="dynamics.js"></script><script src="stimulus.js"></script><script src="damage.js"></script><script src="recovery.js"></script><script src="totals.js"></script><script src="muscle.js"></script>
-<script src="render.js"></script><script src="trace.js"></script><script src="plot.js"></script><script src="presets.js"></script><script src="sets.js"></script><script src="panel.js"></script><script src="lane.js"></script><script src="ui.js"></script>
+<script src="units.js"></script><script src="controller.js"></script><script src="dynamics.js"></script><script src="tension.js"></script><script src="damage.js"></script><script src="recovery.js"></script><script src="totals.js"></script><script src="weeks.js"></script><script src="muscle.js"></script>
+<script src="vendor/three.min.js"></script><script src="colours.js"></script><script src="view3d.js"></script><script src="trace.js"></script><script src="plot.js"></script><script src="doseplot.js"></script><script src="presets.js"></script><script src="provenance.js"></script><script src="provtable.js"></script><script src="sets.js"></script><script src="panel.js"></script><script src="lane.js"></script><script src="ui.js"></script>
 </body></html>

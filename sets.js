@@ -4,8 +4,12 @@
     constructor(body) { this.body = body; this.n = {}; }
     add(r) {
       const num = this.n[r.label] = (this.n[r.label] || 0) + 1, pct = v => Math.round(v * 100) + '%';
+      // "slow / fast" cells; tension figures also show the change from this set
+      const both = f => ['slow', 'fast'].map(f).join(' / ');
+      const recruited = both(t => r.now[t].n ? pct(r.now[t].recruited / r.now[t].n) : '-');
+      const grew = (k, digits) => both(t => r.now[t][k].toFixed(digits) + ' (+' + (r.now[t][k] - r.before[t][k]).toFixed(digits) + ')');
       const cells = [r.label + num, r.load + '%' + (r.dyn ? '' : ' hold'), r.dyn ? r.reps : '-', r.end, r.time.toFixed(0) + 's',
-        r.stim.toFixed(2) + ' (+' + r.dStim.toFixed(2) + ')', pct(r.dmg) + ' (+' + pct(r.dDmg) + ')', r.dDmg > 0.005 ? (r.dStim / r.dDmg).toFixed(1) : '-', pct(r.def24), r.setup];
+        recruited, grew('tut', 0), grew('effReps', 1), pct(r.dmg) + ' (+' + pct(r.dDmg) + ')', pct(r.def24), r.setup];
       const tr = document.createElement('tr');
       cells.forEach((c, i) => {
         const td = document.createElement('td'); td.textContent = c;

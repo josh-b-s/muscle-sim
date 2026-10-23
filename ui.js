@@ -3,7 +3,7 @@
   const $ = id => document.getElementById(id);
   const LEG = {
     energy: ['linear-gradient(90deg,hsl(0 55% 86%),hsl(0 80% 32%))', 'depleted', 'full'],
-    stimulus: ['linear-gradient(90deg,hsl(140 65% 50%),hsl(0 65% 50%))', 'low stimulus', 'high stimulus'],
+    tut: ['linear-gradient(90deg,hsl(175 20% 90%),hsl(175 80% 48%))', 'none', 'most in this muscle'],
     tension: ['linear-gradient(90deg,hsl(50 90% 62%),hsl(0 90% 45%))', 'low force', 'high force'],
     fatigue: ['linear-gradient(90deg,hsl(280 55% 55%),hsl(40 55% 55%))', 'none', 'high force loss'],
     damage: ['linear-gradient(90deg,hsl(330 15% 88%),hsl(330 85% 48%))', 'none', 'heavily damaged'],

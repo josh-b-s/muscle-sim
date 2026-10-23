@@ -10,7 +10,7 @@
       this.units = M.makeUnits(this.fibres);
       this.max = this.baseMax = this.fibres.reduce((s, f) => s + f.fmax, 0);
       this.E = this.force = this.rawForce = this.t = this.target = this.vel = 0;
-      this.dynamic = false; this.pos = 1; this.phase = 'concentric'; this.reps = 0; this.failed = false; this.stall = 0;
+      this.dynamic = false; this.pos = 1; this.phase = 'concentric'; this.reps = 0; this.failed = false; this.stall = 0; this.repT = 0;
       // central (CNS) fatigue: reduced voluntary drive capacity from the nervous system
       // itself, distinct from anything happening in the muscle tissue. It builds slowly
       // during hard effort and clears far more slowly than local energy stores, so unlike
@@ -40,13 +40,14 @@
       for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; attempt(m) ? lo = m : hi = m; }
       return lo;
     }
-    // session totals (stimulus, damage) survive reset() so several sets add up
+    // session totals (tension exposure, damage) survive reset() so several sets add up
     clearSession() {
-      this.fibres.forEach(f => Object.assign(f, {imp: 0, tut: 0, stress: 0, everActive: false, dmg: 0}));
+      this.fibres.forEach(f => Object.assign(f, {tut: 0, repTut: 0, effReps: 0, everActive: false, dmg: 0}));
     }
     // begin a set from the bottom of the range with counters cleared
     startSet(dynamic) {
-      Object.assign(this, {pos: 1, phase: 'concentric', reps: 0, failed: false, stall: 0, vel: 0, dynamic});
+      Object.assign(this, {pos: 1, phase: 'concentric', reps: 0, failed: false, stall: 0, vel: 0, dynamic, repT: 0});
+      this.fibres.forEach(f => { f.repTut = 0; });
     }
     // scale every fibre's strength so total capacity is `total`, then recalibrate 1RM (fresh session)
     setCapacity(total) {
@@ -91,9 +92,8 @@
         u.capSum = 0;
         for (const f of u.fibres) {
           f.cap = f.fmax * M.quality(f) * lt; u.capSum += f.cap; f.a = u.a;
-          const glyBefore = f.gly;
           M.metabolise(f, h, u.a, r / cfg.peakRate, perf);
-          M.trackStimulus(f, h, glyBefore);
+          M.trackTension(f, h);
           M.trackDamage(f, h, this.dynamic && this.phase === 'eccentric', length, this.trueMax ? this.target / this.trueMax : 1);
         }
         force += u.a * u.capSum;
@@ -109,7 +109,11 @@
       for (let i = 0; i < n; i++) {
         const L = this.dynamic ? 0.8 + 0.35 * this.pos : length;
         this.solveAt(h, L, on, cadence);
-        if (this.dynamic && on && !this.failed) M.stepRep(this, h, cadence);
+        if (this.dynamic && on && !this.failed) {
+          const before = this.reps;
+          this.repT += h; M.stepRep(this, h, cadence);
+          if (this.reps > before) { M.closeRep(this.fibres, this.repT); this.repT = 0; }
+        }
       }
       // central fatigue builds with the square of relative drive (so near-max efforts
       // cost disproportionately more than moderate ones, matching how central fatigue

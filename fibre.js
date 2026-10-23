@@ -4,7 +4,7 @@
   M.fibre = (x, y, p) => {
     const s = type.scale(p);
     return {x, y, p, s, fmax: s * s / 0.64, atp: 1, pcr: 1, gly: 1, h: 0, ionic: 0, a: 0, cap: 0, oxAct: 0, poly: null,
-      imp: 0, tut: 0, stress: 0, everActive: false, dmg: 0};
+      tut: 0, repTut: 0, effReps: 0, everActive: false, dmg: 0};
   };
   // fresh-state copy of a fibre's geometry and type, for cloning a muscle
   M.cloneFibre = f => { const g = M.fibre(f.x, f.y, f.p); g.r = f.r; g.poly = f.poly; return g; };

@@ -1,8 +1,4 @@
-// whole-muscle session aggregates: mean stimulus score and mean damage
+// whole-muscle session aggregates: tension exposure by fibre type and mean damage
 (function (M) {
-  M.totals = fibres => {
-    let s = 0, d = 0;
-    for (const f of fibres) { s += M.stimScore(f); d += f.dmg; }
-    return {stim: s / fibres.length, dmg: d / fibres.length};
-  };
+  M.totals = fibres => ({...M.summarise(fibres), dmg: fibres.reduce((s, f) => s + f.dmg, 0) / fibres.length});
 })(window.M);
